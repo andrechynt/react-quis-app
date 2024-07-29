@@ -109,18 +109,7 @@ export const QuisProvider = ({ children }) => {
 
 	const expiryTimestamp = initialTimer();
 
-	const {
-		totalSeconds,
-		seconds,
-		minutes,
-		hours,
-		days,
-		isRunning,
-		start,
-		pause,
-		resume,
-		restart,
-	} = useTimer({
+	const { seconds, minutes, restart } = useTimer({
 		expiryTimestamp,
 		onExpire: () => {
 			setUser((prev) => ({
@@ -137,7 +126,7 @@ export const QuisProvider = ({ children }) => {
 		},
 	});
 
-	const time = { minutes, seconds, restart, pause, resume, isRunning, start };
+	const time = { minutes, seconds, restart };
 
 	return (
 		<QuisContext.Provider

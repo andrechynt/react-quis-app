@@ -35,9 +35,9 @@ export default function Quis() {
 							type="radio"
 							id="default-radio"
 							label={item}
-							name="answers"
+							name="choice"
 							value={item}
-							onChange={handleRadio}
+							onChange={handleRadioButton}
 							checked={answer === item}
 						/>
 					</div>
@@ -48,8 +48,8 @@ export default function Quis() {
 						id="default-radio"
 						label={correct}
 						value={correct}
-						name="answers"
-						onChange={handleRadio}
+						name="choice"
+						onChange={handleRadioButton}
 						checked={answer === correct}
 					/>
 				</div>
@@ -80,13 +80,13 @@ export default function Quis() {
 
 	const buttonSubmit = (number) => {
 		return (
-			<Button variant="primary" className="mt-2" onClick={submitQuestion}>
+			<Button variant="primary" onClick={submitQuestion}>
 				{number + 1 <= questions.length ? ">" : "Finish"}
 			</Button>
 		);
 	};
 
-	const handleRadio = (event) => {
+	const handleRadioButton = (event) => {
 		setAnswer(event.target.value);
 		setCheked(event.target.checked);
 	};
@@ -107,15 +107,15 @@ export default function Quis() {
 				}}
 			>
 				<Card className="custom-width">
-					<Card.Header className="p-3">
+					<Card.Header className="p-4">
 						<h4 className="mb-0">{`Question ${number + 1}`}</h4>
 					</Card.Header>
 					<Card.Body className="p-4">
-						<Card.Title className="text-break">{question.question}</Card.Title>
+						<Card.Title className="text-break mb-0">{question.question}</Card.Title>
 						{answers(question.correct_answer, question.incorrect_answers)}
 						<div className="text-end">{buttonSubmit(number + 1)}</div>
 					</Card.Body>
-					<Card.Footer className="text-muted p-3">
+					<Card.Footer className="text-muted p-4">
 						<Row className="g-3">
 							{questions.length &&
 								questions.map((item, index) => (

@@ -18,6 +18,7 @@ export default function Login({ isLogin, auth }) {
 	const [err, setErr] = useState(false);
 	const navigate = useNavigate();
 	const { user } = useQuis();
+	const [validated, setValidated] = useState(false);
 
 	useEffect(() => {
 		isLogin && navigate("/dashboard");
@@ -27,12 +28,14 @@ export default function Login({ isLogin, auth }) {
 
 	const onChangePassword = (e) => setPassword(e.target.value);
 
-	const authenticated = () => {
+	const authenticated = (event) => {
+    event.preventDefault();
+
 		if (email === user.email && password === user.password) {
 			setVisible(true);
 
 			setTimeout(() => {
-        auth(true);
+				auth(true);
 				setVisible(false);
 				setEmail("");
 				setPassword("");
@@ -42,6 +45,17 @@ export default function Login({ isLogin, auth }) {
 			setEmail("");
 			setPassword("");
 		}
+	};
+
+	const handleSubmit = (event) => {
+		const form = event.currentTarget;
+		if (form.checkValidity() === false) {
+			event.preventDefault();
+			event.stopPropagation();
+		}
+
+		setValidated(true);
+		authenticated(event);
 	};
 
 	return (
@@ -54,8 +68,8 @@ export default function Login({ isLogin, auth }) {
 			}}
 		>
 			<Card className="custom-width p-4">
-				<Card.Title className="text-center">Login</Card.Title>
-				<Card.Body>
+				<Card.Title className="text-center mb-4">QUIz</Card.Title>
+				<Form validated={validated} onSubmit={handleSubmit}>
 					<FloatingLabel
 						controlId="floatingInput"
 						label="Email address"
@@ -66,7 +80,7 @@ export default function Login({ isLogin, auth }) {
 							placeholder="name@example.com"
 							onChange={onChangeEmail}
 							value={email}
-							required={true}
+							required
 						/>
 					</FloatingLabel>
 					<FloatingLabel controlId="floatingPassword" label="Password">
@@ -75,28 +89,25 @@ export default function Login({ isLogin, auth }) {
 							placeholder="Password"
 							onChange={onChangePassword}
 							value={password}
-							required={true}
+							required
 						/>
 					</FloatingLabel>
-				</Card.Body>
-				<Button
-					variant="primary"
-					type="submit"
-					className="ms-auto mt-2"
-					onClick={authenticated}
-				>
-					{visible ? (
-						<Spinner
-							as="span"
-							animation="border"
-							size="sm"
-							role="status"
-							aria-hidden="true"
-						/>
-					) : (
-						"Login"
-					)}
-				</Button>
+					<div className="text-end mt-4">
+						<Button variant="primary" type="submit">
+							{visible ? (
+								<Spinner
+									as="span"
+									animation="border"
+									size="sm"
+									role="status"
+									aria-hidden="true"
+								/>
+							) : (
+								"Login"
+							)}
+						</Button>
+					</div>
+				</Form>
 				{err && (
 					<Alert variant="danger" className="mt-4">
 						Email and password doesnt match !!!

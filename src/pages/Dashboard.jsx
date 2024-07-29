@@ -46,7 +46,7 @@ export default function Dashboard({ isLogin }) {
 
 	return (
 		<>
-			<NavBar dashboard={true} event={onLogout} />
+			<NavBar dashboard={true} event={onLogout} username={user.username} />
 			<Container
 				style={{
 					display: "flex",
@@ -59,7 +59,7 @@ export default function Dashboard({ isLogin }) {
 					<Card className="custom-width">
 						<Card.Header
 							as="h5"
-							className="text-center bg-secondary text-light"
+							className="text-center bg-secondary text-light p-4"
 						>
 							SCORE
 						</Card.Header>
@@ -80,7 +80,7 @@ export default function Dashboard({ isLogin }) {
 									{`Answer : ${user.answer.count}`}
 								</Alert>
 							</div>
-							<div className="text-end mt-5">
+							<div className="text-end mt-4">
 								<Button variant="primary" onClick={retakeQuis}>
 									Retake Quis
 								</Button>
