@@ -44,6 +44,16 @@ export default function Dashboard({ isLogin }) {
 		time.restart(expiryTimestamp);
 	};
 
+	const scoreVariant = (score) => {
+		if (score < 50) {
+			return "danger";
+		} else if (score >= 50 && score < 80) {
+			return "warning";
+		} else if (score >= 80) {
+			return "success";
+		}
+	};
+
 	return (
 		<>
 			<NavBar dashboard={true} event={onLogout} username={user.username} />
@@ -65,7 +75,10 @@ export default function Dashboard({ isLogin }) {
 						</Card.Header>
 						<Card.Body className="p-4">
 							<Card.Title as="h1" className="d-flex justify-content-center">
-								<Alert variant="success" className="py-4 px-5">
+								<Alert
+									variant={scoreVariant(user.answer.score)}
+									className="py-4 px-5"
+								>
 									{user.answer.score}
 								</Alert>
 							</Card.Title>
