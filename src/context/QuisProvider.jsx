@@ -1,8 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { useEffect, useState } from "react";
-import { useTimer } from "react-timer-hook";
 import { userData } from "../data/user";
-import { initialTimer, refreshPage } from "../utils/helpers";
+import { refreshPage } from "../utils/helpers";
 import { QuisContext } from "./QuisContext";
 
 export const QuisProvider = ({ children }) => {
@@ -93,40 +92,22 @@ export const QuisProvider = ({ children }) => {
 	};
 
 	const reset = () => {
+		setUser(userData);
+	};
+
+	const expiredTimer = () => {
 		setUser((prev) => ({
 			...prev,
 			startQuis: false,
-			endQuis: false,
+			endQuis: true,
 			answer: {
 				...prev.answer,
-				correct: 0,
-				incorrect: 0,
-				score: 0,
-				count: 0,
+				incorrect: questions.length - prev.answer.count,
 			},
 		}));
+
+		refreshPage();
 	};
-
-	const expiryTimestamp = initialTimer();
-
-	const { seconds, minutes, restart } = useTimer({
-		expiryTimestamp,
-		onExpire: () => {
-			setUser((prev) => ({
-				...prev,
-				startQuis: false,
-				endQuis: true,
-				answer: {
-					...prev.answer,
-					incorrect: questions.length - prev.answer.count,
-				},
-			}));
-
-			refreshPage();
-		},
-	});
-
-	const time = { minutes, seconds, restart };
 
 	return (
 		<QuisContext.Provider
@@ -136,9 +117,8 @@ export const QuisProvider = ({ children }) => {
 				questions,
 				result,
 				reset,
-				expiryTimestamp,
-				time,
 				resumeQuis,
+				expiredTimer,
 			}}
 		>
 			{children}

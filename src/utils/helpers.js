@@ -4,7 +4,7 @@ export const refreshPage = () => {
 
 export const initialTimer = () => {
 	const time = new Date();
-	time.setSeconds(time.getSeconds() + 180);
+	time.setSeconds(time.getSeconds() + 90);
 
 	return time;
 };

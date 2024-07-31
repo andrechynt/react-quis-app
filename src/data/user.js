@@ -8,6 +8,6 @@ export const userData = {
 		correct: 0,
 		incorrect: 0,
 		score: 0,
-    count: 0,
+		count: 0,
 	},
 };

@@ -1,24 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
+import { useTimer } from "react-timer-hook";
 import Footer from "../component/Footer";
 import NavBar from "../component/Navbar";
 import { useQuis } from "../context/QuisContext";
+import { initialTimer } from "../utils/helpers";
 
 export default function Quis() {
 	let { id } = useParams();
 	const navigate = useNavigate();
-	const { user, updateUser, questions, result, time, resumeQuis } = useQuis();
+	const { user, updateUser, questions, result, resumeQuis, expiredTimer } =
+		useQuis();
 	const [number, setNumber] = useState(parseInt(id));
 	const [isChecked, setCheked] = useState(false);
 	const [answer, setAnswer] = useState("");
 	const [question, setQuestion] = useState(questions[number]);
 
+	const expiryTimestamp = initialTimer();
+
+	const { seconds, minutes, pause } = useTimer({
+		expiryTimestamp,
+		onExpire: () => {
+			expiredTimer();
+		},
+	});
+
 	useEffect(() => {
 		user.startQuis == false && navigate("dashboard");
 
-		user.startQuis == true &&
-			user.endQuis == false &&
+		if (user.startQuis && user.endQuis == false)
 			navigate(`/quis/${resumeQuis()}`);
 
 		setNumber(parseInt(id));
@@ -65,6 +76,7 @@ export default function Quis() {
 		} else {
 			updateUser({ startQuis: false, endQuis: true });
 			navigate("/dashboard");
+			pause();
 		}
 	};
 
@@ -93,10 +105,7 @@ export default function Quis() {
 
 	return (
 		<>
-			<NavBar
-				quis={true}
-				timer={{ minutes: time.minutes, seconds: time.seconds }}
-			/>
+			<NavBar quis={true} timer={{ minutes: minutes, seconds: seconds }} />
 			<Container
 				style={{
 					display: "flex",
@@ -111,7 +120,9 @@ export default function Quis() {
 						<h4 className="mb-0">{`Question ${number + 1}`}</h4>
 					</Card.Header>
 					<Card.Body className="p-4">
-						<Card.Title className="text-break mb-0">{question.question}</Card.Title>
+						<Card.Title className="text-break mb-0">
+							{question.question}
+						</Card.Title>
 						{answers(question.correct_answer, question.incorrect_answers)}
 						<div className="text-end">{buttonSubmit(number + 1)}</div>
 					</Card.Body>

@@ -8,13 +8,13 @@ import { refreshPage } from "../utils/helpers";
 
 export default function Dashboard({ isLogin }) {
 	const navigate = useNavigate();
-	const { user, updateUser, reset, expiryTimestamp, time, resumeQuis } =
-		useQuis();
+	const { user, updateUser, reset, resumeQuis } = useQuis();
 
 	useEffect(() => {
 		if (!isLogin) navigate("/");
-		else if (user.startQuis && user.endQuis == false)
+		else if (user.startQuis && user.endQuis == false) {
 			navigate(`/quis/${resumeQuis()}`);
+		}
 	}, [isLogin]);
 
 	const onLogout = () => {
@@ -40,8 +40,6 @@ export default function Dashboard({ isLogin }) {
 				count: 0,
 			},
 		});
-
-		time.restart(expiryTimestamp);
 	};
 
 	const scoreVariant = (score) => {
