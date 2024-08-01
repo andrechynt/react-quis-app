@@ -37,7 +37,7 @@ export default function Quis() {
 		setCheked(false);
 	}, [id]);
 
-	const answers = (correct, incorrect) => {
+	const answerChoices = (correct, incorrect) => {
 		return (
 			<Form className="my-4">
 				{incorrect.map((item, index) => (
@@ -123,7 +123,7 @@ export default function Quis() {
 						<Card.Title className="text-break mb-0">
 							{question.question}
 						</Card.Title>
-						{answers(question.correct_answer, question.incorrect_answers)}
+						{answerChoices(question.correct_answer, question.incorrect_answers)}
 						<div className="text-end">{buttonSubmit(number + 1)}</div>
 					</Card.Body>
 					<Card.Footer className="text-muted p-4">
